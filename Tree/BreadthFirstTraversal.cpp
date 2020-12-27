@@ -41,6 +41,37 @@ class BST{
            }
         }
     }
+    Node* FindMin(Node* root){
+        while(root->left != NULL) root = root->left;
+        return root;
+    }
+    Node* remove(Node* root,int data){
+        if(root == NULL) return root;
+        else if(root->data > data){
+            root->left = remove(root->left,data);
+        }
+        else if(root->data < data){
+            root->right = remove(root->right,data);
+        }else{
+            if(root->left == NULL && root->right == NULL){
+                delete root;
+                root = NULL;
+            }else if(root->right == NULL){
+                Node* temp = root;
+                root = root->left;
+                delete temp; 
+            }else if(root->left == NULL){
+                Node* temp = root;
+                root = root->right;
+                delete temp; 
+            }else{
+                Node* temp = FindMin(root->right);
+                root->data = temp->data;
+                root->right = remove(root->right,temp->data);
+            }
+        }
+        return root; 
+    }
     void inorder(Node* node){
         if(node == NULL) return;
         inorder(node->left);
@@ -134,6 +165,7 @@ int main(){
     //100 , 20 , 10 , 30 , 200 , 150 , 300
 
    // b.inorder(b.getRoot());
+   b.remove(b.getRoot(),200);
     b.levelOrder1();
     return 0;
 }
